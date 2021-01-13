@@ -1,0 +1,336 @@
+---
+title: "Data and Coding"
+author: "Alvin Wendt"
+date: "1/7/2021"
+output: html_document
+---
+
+```{r}
+library(leaflet)
+library(plotly)
+library(dplyr)
+library(tidyverse)
+library(leaflet.extras)
+library(sf)
+```
+
+
+```{r}
+service_calls <- read.csv("data/Metro_CFS_OpenData_CLEAN.csv")
+```
+
+```{r}
+pal <- colorFactor(palette = c("#a6cee3",
+"#a6cee3",
+"#a6cee3",
+"#a6cee3",
+"#a6cee3",
+"#a6cee3",
+"#a6cee3",
+"#b2df8a",
+"#e31a1c",
+"#33a02c",
+"#fb9a99",
+"#fdbf6f",
+"#ff7f00",
+"#cab2d6",
+"#6a3d9a",
+"#6a3d9a",
+"#6a3d9a",
+"#b15928",
+"#ffff99",
+"#b15928"),
+levels = c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+"ASSAULT/BATTERY",
+"ASSAULT/BATTERY NEGATIVE INJURY",
+"ASSAULT/BATTERY WITH A GUN",
+"ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+"AUTO BURGLARY",
+"BURGLARY",
+"FIGHT",
+"HOMICIDE",
+"INDECENT EXPOSURE",
+"JUVENILE DISTURBANCE",
+"LARCENY FROM PERSON (NON ROBBERY)",
+"MALICIOUS DESTRUCTION OF PROPERTY",
+"OTHER DISTURBANCE",
+"PERSON WITH A GUN",
+"PERSON WITH A KNIFE",
+"PERSON WITH OTHER DEADLY WEAPON",
+"RECOVERED STOLEN VEHICLE",
+"ROBBERY",
+"STOLEN MOTOR VEHICLE"))
+```
+
+```{r}
+leaflet() %>%
+  addProviderTiles("CartoDB") %>%
+  addMarkers(lng = service_calls$LONG, lat = service_calls$LAT, popup = service_calls$Type_Description, clusterOptions = markerClusterOptions()) 
+```
+
+
+```{r}
+SC_map <- service_calls %>% 
+  leaflet() %>%
+  addProviderTiles("CartoDB") %>%
+  addCircleMarkers(radius=2, color = ~pal(Type_Description), popup = service_calls$Type_Description, clusterOptions = markerClusterOptions())
+```
+
+
+```{r}
+SC_map %>%
+addLegend(position = "bottomright", pal = pal,
+values = c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+"ASSAULT/BATTERY",
+"ASSAULT/BATTERY NEGATIVE INJURY",
+"ASSAULT/BATTERY WITH A GUN",
+"ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+"AUTO BURGLARY",
+"BURGLARY",
+"FIGHT",
+"HOMICIDE",
+"INDECENT EXPOSURE",
+"JUVENILE DISTURBANCE",
+"LARCENY FROM PERSON (NON ROBBERY)",
+"MALICIOUS DESTRUCTION OF PROPERTY",
+"OTHER DISTURBANCE",
+"PERSON WITH A GUN",
+"PERSON WITH A KNIFE",
+"PERSON WITH OTHER DEADLY WEAPON",
+"RECOVERED STOLEN VEHICLE",
+"ROBBERY",
+"STOLEN MOTOR VEHICLE"))
+```
+
+```{r}
+service_calls %>% 
+  leaflet() %>%
+  addProviderTiles("CartoDB") %>%
+  addCircleMarkers(
+    data = service_calls %>% filter(Type_Description =="OTHER DISTURBANCE"),
+    color = ~pal(Type_Description),
+    group = "OTHER DISTURBANCE",
+    clusterOptions = markerClusterOptions()) %>% 
+ addLayersControl(
+    overlayGroups = c("OTHER DISTURBANCE"))
+```
+
+```{r}
+crime_list <- service_calls$Type_Description %>% 
+  unique()
+
+```
+
+```{r}
+m <- service_calls %>% 
+  leaflet() %>%
+  addProviderTiles("CartoDB")
+for (crime in crime_list){
+  m <- m %>% 
+    addCircleMarkers(
+    data = service_calls %>% filter(Type_Description ==crime),
+    color = ~pal(Type_Description),
+    group = crime,
+    clusterOptions = markerClusterOptions())
+}
+
+m <- m %>% addLayersControl(
+    overlayGroups = crime_list)
+```
+
+```{r}
+m
+```
+
+
+
+
+```{r}
+service_calls %>% 
+  pull(Type_Description)
+```
+
+
+```{r}
+
+
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ASSAULT/BATTERY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ASSAULT/BATTERY NEGATIVE INJURY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ASSAULT/BATTERY WITH A GUN",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "AUTO BURGLARY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "BURGLARY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "FIGHT",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "HOMICIDE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "INDECENT EXPOSURE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "JUVENILE DISTURBANCE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "LARCENY FROM PERSON (NON ROBBERY)",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "MALICIOUS DESTRUCTION OF PROPERTY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "OTHER DISTURBANCE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "PERSON WITH A GUN",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "PERSON WITH A KNIFE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "PERSON WITH OTHER DEADLY WEAPON",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "RECOVERED STOLEN VEHICLE",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "ROBBERY",
+    clusterOptions = markerClusterOptions()) %>%
+  addCircleMarkers(
+    data = service_calls,
+    color = ~pal(Type_Description),
+    group = "STOLEN MOTOR VEHICLE",
+    clusterOptions = markerClusterOptions()) %>%
+    
+  addLayersControl(
+    overlayGroups = c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+                      "ASSAULT/BATTERY",
+                      "ASSAULT/BATTERY NEGATIVE INJURY",
+                      "ASSAULT/BATTERY WITH A GUN",
+                      "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+                      "AUTO BURGLARY",
+                      "BURGLARY",
+                      "FIGHT",
+                      "HOMICIDE",
+                      "INDECENT EXPOSURE",
+                      "JUVENILE DISTURBANCE",
+                      "LARCENY FROM PERSON (NON ROBBERY)",
+                      "MALICIOUS DESTRUCTION OF PROPERTY",
+                      "OTHER DISTURBANCE",
+                      "PERSON WITH A GUN",
+                      "PERSON WITH A KNIFE",
+                      "PERSON WITH OTHER DEADLY WEAPON",
+                      "RECOVERED STOLEN VEHICLE",
+                      "ROBBERY",
+                      "STOLEN MOTOR VEHICLE"))
+```
+
+
+
+
+
+
+
+quakes1 <- quakes[1:10,]
+
+leafIcons <- icons(
+  iconUrl = ifelse(quakes1$mag < 4.6,
+    "http://leafletjs.com/examples/custom-icons/leaf-green.png",
+    "http://leafletjs.com/examples/custom-icons/leaf-red.png"
+  ),
+  iconWidth = 38, iconHeight = 95,
+  iconAnchorX = 22, iconAnchorY = 94,
+  shadowUrl = "http://leafletjs.com/examples/custom-icons/leaf-shadow.png",
+  shadowWidth = 50, shadowHeight = 64,
+  shadowAnchorX = 4, shadowAnchorY = 62
+)
+
+leaflet(data = quakes1) %>% addTiles() %>%
+  addMarkers(~long, ~lat, icon = leafIcons)
+  
+  
+  
+"ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+"ASSAULT/BATTERY",
+"ASSAULT/BATTERY NEGATIVE INJURY",
+"ASSAULT/BATTERY WITH A GUN",
+"ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+"AUTO BURGLARY",
+"BURGLARY",
+"FIGHT",
+"HOMICIDE",
+"INDECENT EXPOSURE",
+"JUVENILE DISTURBANCE",
+"LARCENY FROM PERSON (NON ROBBERY)",
+"MALICIOUS DESTRUCTION OF PROPERTY",
+"OTHER DISTURBANCE",
+"PERSON WITH A GUN",
+"PERSON WITH A KNIFE",
+"PERSON WITH OTHER DEADLY WEAPON",
+"RECOVERED STOLEN VEHICLE",
+"ROBBERY",
+"STOLEN MOTOR VEHICLE",
+
+```{r}
+require(sf)
+shapeTracts <- st_read("data/Census Shp File Tracts/cb_2019_us_tract_500k.shp")
+shapeGroups <- st_read("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
+```
+```{r}
+write.csv(shape, "data/Census.csv")
+```
+
+
