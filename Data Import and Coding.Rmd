@@ -151,7 +151,7 @@ service_calls %>%
 ```
 
 
-```{r}
+
 
 
   addCircleMarkers(
@@ -275,7 +275,7 @@ service_calls %>%
                       "PERSON WITH OTHER DEADLY WEAPON",
                       "RECOVERED STOLEN VEHICLE",
                       "ROBBERY",
-                      "STOLEN MOTOR VEHICLE"))
+               "STOLEN MOTOR VEHICLE"))
 ```
 
 
@@ -323,14 +323,165 @@ leaflet(data = quakes1) %>% addTiles() %>%
 "RECOVERED STOLEN VEHICLE",
 "ROBBERY",
 "STOLEN MOTOR VEHICLE",
-
+```
 ```{r}
 require(sf)
-shapeTracts <- st_read("data/Census Shp File Tracts/cb_2019_us_tract_500k.shp")
 shapeGroups <- st_read("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
+shapeGroups1 <- read_sf("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
+class(shp)
 ```
 ```{r}
-write.csv(shape, "data/Census.csv")
+shapeGroups1 <- readOGR("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
+```
+```{r}
+shapeGroups1 %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons()
 ```
 
 
+
+```{r}
+#write.csv(shape, "data/Census.csv")
+```
+
+```{r}
+EmploymentStatus <- read.csv("data/Census Employment Status/ACSDT5Y2019.B23025_data_with_overlays_2021-01-12T212705.csv")
+MedianAge <- read.csv("data/Census Median Age by Sex/ACSDT5Y2019.B01002_data_with_overlays_2021-01-12T210241.csv")
+MedianIncome <- read.csv("data/Census Median Household Income/ACSDT5Y2019.B19013_data_with_overlays_2021-01-09T133607.csv")
+MedianHousePrice <- read.csv("data/Census Median Housing Price/ACSDT5Y2019.B25077_data_with_overlays_2021-01-12T211917.csv")
+PovertyLevel <- read.csv("data/Census Poverty Level/ACSDT5Y2019.B29003_data_with_overlays_2021-01-12T212252.csv")
+Race <- read.csv("data/Census Race/ACSDT5Y2019.B02001_data_with_overlays_2021-01-09T134118.csv")
+Vacancies <- read.csv("data/Census Vacancies/ACSDT5Y2019.B25004_data_with_overlays_2021-01-12T213202.csv")
+```
+
+To Merge Geodata with attribute
+```{r}
+EmploymentStatus <- read.csv("data/Census Employment Status/ACSDT5Y2019.B23025_data_with_overlays_2021-01-12T212705.csv")
+MedianAge <- read.csv("data/Census Median Age by Sex/ACSDT5Y2019.B01002_data_with_overlays_2021-01-12T210241.csv")
+MedianIncome <- read.csv("data/Census Median Household Income/ACSDT5Y2019.B19013_data_with_overlays_2021-01-09T133607.csv")
+MedianHousePrice <- read.csv("data/Census Median Housing Price/ACSDT5Y2019.B25077_data_with_overlays_2021-01-12T211917.csv")
+PovertyLevel <- read.csv("data/Census Poverty Level/ACSDT5Y2019.B29003_data_with_overlays_2021-01-12T212252.csv")
+Race <- read.csv("data/Census Race/ACSDT5Y2019.B02001_data_with_overlays_2021-01-09T134118.csv")
+Vacancies <- read.csv("data/Census Vacancies/ACSDT5Y2019.B25004_data_with_overlays_2021-01-12T213202.csv")
+```
+
+```{r}
+EmploymentStatus <- merge(EmploymentStatus,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+MedianAge <- merge(MedianAge,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+MedianIncome <- merge(MedianIncome,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+MedianHousePrice <- merge(MedianHousePrice,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+PovertyLevel <- merge(PovertyLevel,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+Race <- merge(Race,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+Vacancies <- merge(Vacancies,shapeGroups,by.x = "id", by.y = "AFFGEOID")
+
+```
+
+```{r}
+labelsEmploymentStatus <- sprintf(
+  "Percent Unemployed: <strong>%s</strong>",
+ EmploymentStatus$Percent.Unemployed
+) %>% lapply(htmltools::HTML)
+
+MedianAge$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsEmploymentStatus,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+
+```{r}
+labelsVacancies <- sprintf(
+  "Total Vacancies: <strong>%s</strong>",
+  Vacancies$Total.Vacancies
+) %>% lapply(htmltools::HTML)
+
+Vacancies$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsVacancies,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+
+```{r}
+labelsMedianIncome <- sprintf(
+  "Median Income: <strong>%s</strong>",
+  MedianIncome$Median.household.income.in.the.past.12.months
+) %>% lapply(htmltools::HTML)
+
+MedianIncome$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsMedianIncome,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+```{r}
+labelsMedianHousePrice <- sprintf(
+  "Median House Price: <strong>%s</strong>",
+  MedianHousePrice$Estimate.Median.House.Value
+) %>% lapply(htmltools::HTML)
+
+MedianIncome$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsMedianHousePrice,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+
+```{r}
+labelsMedianAge <- sprintf(
+  "Median Age: <strong>%s</strong>",
+  MedianAge$Estimate.Median.age
+) %>% lapply(htmltools::HTML)
+
+MedianAge$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsMedianAge,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+
+```{r}
+labelsPovertyLevel <- sprintf(
+  "Percent Above Poverty Level: <strong>%s</strong>",
+  PovertyLevel$X..at.or.above.the.poverty.level
+) %>% lapply(htmltools::HTML)
+
+MedianAge$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(weight = 1,
+              color = "grey",
+              label = labelsPovertyLevel,
+              highlight = highlightOptions(weight = 3, color = "red",
+                                           bringToFront = TRUE))
+```
+```{r}
+nc_pal <- colorNumeric(palette = "Blues",
+domain = Vacancies$Total.Vacancies)
+
+MedianAge$geometry %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons(#weight = 1, fillOpacity = 1,
+       #       color = ~nc_pal(Vacancies$Total.Vacancies),
+              highlight = highlightOptions(weight = 1,
+                                           color = "red",
+                                           bringToFront = TRUE))
+```
