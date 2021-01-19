@@ -1,0 +1,95 @@
+library(leaflet)
+library(plotly)
+library(dplyr)
+library(tidyverse)
+library(leaflet.extras)
+library(sf)
+library(gapminder)
+library(rgdal)
+library(shinydashboard)
+
+service_calls <- read.csv("data/Metro_CFS_OpenData_CLEAN.csv")
+service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
+
+shapeGroups <- readOGR("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
+
+EmploymentStatus <- read.csv("data/Census Employment Status/ACSDT5Y2019.B23025_data_with_overlays_2021-01-12T212705.csv")
+MedianAge <- read.csv("data/Census Median Age by Sex/ACSDT5Y2019.B01002_data_with_overlays_2021-01-12T210241.csv")
+MedianIncome <- read.csv("data/Census Median Household Income/ACSDT5Y2019.B19013_data_with_overlays_2021-01-09T133607.csv")
+MedianHousePrice <- read.csv("data/Census Median Housing Price/ACSDT5Y2019.B25077_data_with_overlays_2021-01-12T211917.csv")
+PovertyLevel <- read.csv("data/Census Poverty Level/ACSDT5Y2019.B29003_data_with_overlays_2021-01-12T212252.csv")
+Vacancies <- read.csv("data/Census Vacancies/ACSDT5Y2019.B25004_data_with_overlays_2021-01-12T213202.csv")
+
+
+EmploymentStatus <- merge(shapeGroups,EmploymentStatus,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+MedianAge <- merge(shapeGroups,MedianAge,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+MedianIncome <- merge(shapeGroups,MedianIncome,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+MedianHousePrice <- merge(shapeGroups,MedianHousePrice,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+PovertyLevel <- merge(shapeGroups,PovertyLevel,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+Vacancies <- merge(shapeGroups,Vacancies,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
+
+# Customize icons
+crimeIcons <- iconList(
+  "ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+  "ASSAULT/BATTERY",
+  "ASSAULT/BATTERY NEGATIVE INJURY",
+  "ASSAULT/BATTERY WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),
+  "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assault with Deadly Weapon.png', iconWidth = 35, iconHeight = 35),
+  "AUTO BURGLARY"= makeIcon(iconUrl = './icons/Auto Burglary.png', iconWidth = 35, iconHeight = 35),
+  "BURGLARY"= makeIcon(iconUrl = './icons/Burglary.png', iconWidth = 35, iconHeight = 35),
+  "FIGHT"= makeIcon(iconUrl = './icons/Fight.png', iconWidth = 35, iconHeight = 35),
+  "HOMICIDE"= makeIcon(iconUrl = './icons/Homicide.png', iconWidth = 35, iconHeight = 35),
+  "INDECENT EXPOSURE"= makeIcon(iconUrl = './icons/Indecent Exposure.png', iconWidth = 35, iconHeight = 35),
+  "JUVENILE DISTURBANCE"= makeIcon(iconUrl = './icons/Juvenile Disturbance.png', iconWidth = 35, iconHeight = 35),
+  "LARCENY FROM PERSON (NON ROBBERY)"= makeIcon(iconUrl = './icons/Larceny.png', iconWidth = 35, iconHeight = 35),
+  "MALICIOUS DESTRUCTION OF PROPERTY",
+  "OTHER DISTURBANCE",
+  "PERSON WITH A GUN",
+  "PERSON WITH A KNIFE",
+  "PERSON WITH OTHER DEADLY WEAPON",
+  "RECOVERED STOLEN VEHICLE",
+  "ROBBERY"= makeIcon(iconUrl = './icons/Robbery.png',iconWidth = 35,iconHeight = 35),
+  "STOLEN MOTOR VEHICLE"= makeIcon(iconUrl = './icons/Stolen Motor Vehicle.png', iconWidth = 35, iconHeight = 35)
+)
+
+
+pal <- colorFactor(palette = c("#a6cee3",
+                               "#a6cee3",
+                               "#a6cee3",
+                               "#a6cee3",
+                               "#a6cee3",
+                               "#a6cee3",
+                               "#a6cee3",
+                               "#b2df8a",
+                               "#e31a1c",
+                               "#33a02c",
+                               "#fb9a99",
+                               "#fdbf6f",
+                               "#ff7f00",
+                               "#cab2d6",
+                               "#6a3d9a",
+                               "#6a3d9a",
+                               "#6a3d9a",
+                               "#b15928",
+                               "#ffff99",
+                               "#b15928"),
+                   levels = c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
+                              "ASSAULT/BATTERY",
+                              "ASSAULT/BATTERY NEGATIVE INJURY",
+                              "ASSAULT/BATTERY WITH A GUN",
+                              "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
+                              "AUTO BURGLARY",
+                              "BURGLARY",
+                              "FIGHT",
+                              "HOMICIDE",
+                              "INDECENT EXPOSURE",
+                              "JUVENILE DISTURBANCE",
+                              "LARCENY FROM PERSON (NON ROBBERY)",
+                              "MALICIOUS DESTRUCTION OF PROPERTY",
+                              "OTHER DISTURBANCE",
+                              "PERSON WITH A GUN",
+                              "PERSON WITH A KNIFE",
+                              "PERSON WITH OTHER DEADLY WEAPON",
+                              "RECOVERED STOLEN VEHICLE",
+                              "ROBBERY",
+                              "STOLEN MOTOR VEHICLE"))
