@@ -8,7 +8,7 @@ library(gapminder)
 library(rgdal)
 library(shinydashboard)
 
-service_calls <- read.csv("data/Metro_CFS_OpenData_CLEAN.csv")
+service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
 service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
 
 shapeGroups <- readOGR("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
@@ -28,11 +28,10 @@ MedianHousePrice <- merge(shapeGroups,MedianHousePrice,by.y = "id", by.x = "AFFG
 PovertyLevel <- merge(shapeGroups,PovertyLevel,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 Vacancies <- merge(shapeGroups,Vacancies,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 
-# Customize icons
-crimeIcons <- iconList(
-  "ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
-  "ASSAULT/BATTERY",
-  "ASSAULT/BATTERY NEGATIVE INJURY",
+CrimeIcons <- iconList(
+  "ASLT/BATT NEG INJURY DRIVE-BY SHOOTING"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "ASSAULT/BATTERY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "ASSAULT/BATTERY NEGATIVE INJURY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
   "ASSAULT/BATTERY WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),
   "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assault with Deadly Weapon.png', iconWidth = 35, iconHeight = 35),
   "AUTO BURGLARY"= makeIcon(iconUrl = './icons/Auto Burglary.png', iconWidth = 35, iconHeight = 35),
@@ -42,54 +41,12 @@ crimeIcons <- iconList(
   "INDECENT EXPOSURE"= makeIcon(iconUrl = './icons/Indecent Exposure.png', iconWidth = 35, iconHeight = 35),
   "JUVENILE DISTURBANCE"= makeIcon(iconUrl = './icons/Juvenile Disturbance.png', iconWidth = 35, iconHeight = 35),
   "LARCENY FROM PERSON (NON ROBBERY)"= makeIcon(iconUrl = './icons/Larceny.png', iconWidth = 35, iconHeight = 35),
-  "MALICIOUS DESTRUCTION OF PROPERTY",
-  "OTHER DISTURBANCE",
-  "PERSON WITH A GUN",
-  "PERSON WITH A KNIFE",
-  "PERSON WITH OTHER DEADLY WEAPON",
-  "RECOVERED STOLEN VEHICLE",
+  "MALICIOUS DESTRUCTION OF PROPERTY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "OTHER DISTURBANCE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH A KNIFE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "RECOVERED STOLEN VEHICLE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
   "ROBBERY"= makeIcon(iconUrl = './icons/Robbery.png',iconWidth = 35,iconHeight = 35),
   "STOLEN MOTOR VEHICLE"= makeIcon(iconUrl = './icons/Stolen Motor Vehicle.png', iconWidth = 35, iconHeight = 35)
 )
-
-
-pal <- colorFactor(palette = c("#a6cee3",
-                               "#a6cee3",
-                               "#a6cee3",
-                               "#a6cee3",
-                               "#a6cee3",
-                               "#a6cee3",
-                               "#a6cee3",
-                               "#b2df8a",
-                               "#e31a1c",
-                               "#33a02c",
-                               "#fb9a99",
-                               "#fdbf6f",
-                               "#ff7f00",
-                               "#cab2d6",
-                               "#6a3d9a",
-                               "#6a3d9a",
-                               "#6a3d9a",
-                               "#b15928",
-                               "#ffff99",
-                               "#b15928"),
-                   levels = c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
-                              "ASSAULT/BATTERY",
-                              "ASSAULT/BATTERY NEGATIVE INJURY",
-                              "ASSAULT/BATTERY WITH A GUN",
-                              "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON",
-                              "AUTO BURGLARY",
-                              "BURGLARY",
-                              "FIGHT",
-                              "HOMICIDE",
-                              "INDECENT EXPOSURE",
-                              "JUVENILE DISTURBANCE",
-                              "LARCENY FROM PERSON (NON ROBBERY)",
-                              "MALICIOUS DESTRUCTION OF PROPERTY",
-                              "OTHER DISTURBANCE",
-                              "PERSON WITH A GUN",
-                              "PERSON WITH A KNIFE",
-                              "PERSON WITH OTHER DEADLY WEAPON",
-                              "RECOVERED STOLEN VEHICLE",
-                              "ROBBERY",
-                              "STOLEN MOTOR VEHICLE"))

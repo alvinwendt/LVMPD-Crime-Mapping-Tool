@@ -1,34 +1,12 @@
 
   function(input, output) {
     output$plot <- renderLeaflet({
-      
-      crimeIcons <- iconList(
-        #"ASLT/BATT NEG INJURY DRIVE-BY SHOOTING",
-        #"ASSAULT/BATTERY",
-        #"ASSAULT/BATTERY NEGATIVE INJURY",
-        "ASSAULT/BATTERY WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),
-        "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assault with Deadly Weapon.png', iconWidth = 35, iconHeight = 35),
-        "AUTO BURGLARY"= makeIcon(iconUrl = './icons/Auto Burglary.png', iconWidth = 35, iconHeight = 35),
-        "BURGLARY"= makeIcon(iconUrl = './icons/Burglary.png', iconWidth = 35, iconHeight = 35),
-        "FIGHT"= makeIcon(iconUrl = './icons/Fight.png', iconWidth = 35, iconHeight = 35),
-        "HOMICIDE"= makeIcon(iconUrl = './icons/Homicide.png', iconWidth = 35, iconHeight = 35),
-        "INDECENT EXPOSURE"= makeIcon(iconUrl = './icons/Indecent Exposure.png', iconWidth = 35, iconHeight = 35),
-        "JUVENILE DISTURBANCE"= makeIcon(iconUrl = './icons/Juvenile Disturbance.png', iconWidth = 35, iconHeight = 35),
-        "LARCENY FROM PERSON (NON ROBBERY)"= makeIcon(iconUrl = './icons/Larceny.png', iconWidth = 35, iconHeight = 35),
-        #"MALICIOUS DESTRUCTION OF PROPERTY",
-        #"OTHER DISTURBANCE",
-        #"PERSON WITH A GUN",
-        #"PERSON WITH A KNIFE",
-        #"PERSON WITH OTHER DEADLY WEAPON",
-        #"RECOVERED STOLEN VEHICLE",
-        "ROBBERY"= makeIcon(iconUrl = './icons/Robbery.png',iconWidth = 35,iconHeight = 35),
-        "STOLEN MOTOR VEHICLE"= makeIcon(iconUrl = './icons/Stolen Motor Vehicle.png', iconWidth = 35, iconHeight = 35)
-      )
-      
+# filter data from inputs
       filteredData <- 
         service_calls %>% filter(Type_Description %in% input$CrimeList) %>%  
         filter(Event_Date >= input$dates[1] & Event_Date <= input$dates[2])
-      
+
+# create map base
     m <- leaflet() %>%
       addTiles(group = 'OSM') %>%
       addProviderTiles('Esri.WorldStreetMap', group = 'Esri') %>%
@@ -45,7 +23,7 @@
                                                bringToFront = TRUE)) %>% 
       addMarkers(
         data = filteredData,
-        icon = ~crimeIcons[Type_Description],
+        icon = ~CrimeIcons[Type_Description],
         popup = ~Type_Description,
         group = "BURGLARY",
         clusterOptions = markerClusterOptions()
