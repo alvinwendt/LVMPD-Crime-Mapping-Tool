@@ -21,16 +21,28 @@ type <- c("ASLT/BATT NEG INJURY DRIVE-BY SHOOTING" = "ASLT/BATT NEG INJURY DRIVE
 
 
 header <- dashboardHeader(
-  title = p("LVMPD Tool"), titleWidth = 400
+  title = p("Las Vegas Metropolitan Police Department Crime Mapping Tool"), titleWidth = 600
 )
 
 sidebar <- dashboardSidebar(
+  tags$style(HTML("
+      .main-sidebar{
+        width: 250px;
+      }
+    ")),
+  
   fluidPage(
 
     # Copy the line below to make a select box 
-    selectInput("mapfilter", label = h4("Census Data Filter by:"),
-                 choices = list("No Filter" = 1, "Employment Status" = 2, "Median Age" = 3,"Median House Price" = 4,"Median Income" = 5,"Vacancies" = 6),
-                 selected = 1)
+    selectInput("mapfilter", label = h4("Census Data Filters:"),
+                 choices = list("No Filter" = "No Filter", 
+                                "Employment Status" = "Employment Status", 
+                                "Median Age" = "Median Age",
+                                "Median House Price" = "Median House Price",
+                                "Median Income" = "Median Income",
+                                "Poverty Level" = "Poverty Level",
+                                "Vacancies" = "Vacancies"),
+                 selected = "No Filter")
     ),
 
   fluidPage(

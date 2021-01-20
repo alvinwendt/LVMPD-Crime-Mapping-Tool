@@ -7,9 +7,14 @@ library(sf)
 library(gapminder)
 library(rgdal)
 library(shinydashboard)
+library(scales)
 
 service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
 service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
+
+service_calls <- service_calls %>%
+  mutate(contentbox = paste('<b>',Type_Description,'</b>')) %>%
+  mutate(contentbox = paste(sep = '<br/>', contentbox,Suspect,Event_Date))
 
 shapeGroups <- readOGR("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
 
