@@ -78,7 +78,7 @@ sidebar <- dashboardSidebar(
   ),
   
   fluidPage(
-  submitButton(text = "Submit",icon =icon('filter')
+  submitButton(text = "Load Map",icon =icon('filter')
                )
   )
 )
