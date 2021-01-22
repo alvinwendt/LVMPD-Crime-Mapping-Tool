@@ -34,7 +34,7 @@ sidebar <- dashboardSidebar(
   fluidPage(
 
     # Copy the line below to make a select box 
-    selectInput("mapfilter", label = h4("Census Data Filters:"),
+    selectInput("mapfilter", label = h4("Census Data Filters"),
                  choices = list("No Filter" = "No Filter", 
                                 "Employment Status" = "Employment Status", 
                                 "Median Age" = "Median Age",
