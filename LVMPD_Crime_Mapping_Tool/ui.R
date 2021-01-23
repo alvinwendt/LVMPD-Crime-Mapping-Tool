@@ -271,6 +271,7 @@ typebiz <- c('Administrative Office Space' = 'Administrative Office Space',
              'Wire Service' = 'Wire Service'
              )           
 
+          
 header <- dashboardHeader(
   title = p("Las Vegas Metropolitan Police Department Crime Mapping Tool"), titleWidth = 600
 )
@@ -280,8 +281,9 @@ sidebar <- dashboardSidebar(disable = TRUE)
 
 
 body <- dashboardBody(
-  tags$head(
-    tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css")),
+  
+ tags$head(
+   tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css")),
   fluidRow(
     column(width =4,
       box(width = NULL, title =tagList(shiny::icon("layer-group",class = 'fa-lg'), "Census Data Filters"),

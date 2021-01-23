@@ -10,6 +10,7 @@ library(shinydashboard)
 library(shiny)
 library(scales)
 library(DT)
+library(shinythemes)
 
 service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
 service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
