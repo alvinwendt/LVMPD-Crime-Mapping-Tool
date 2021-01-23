@@ -7,6 +7,7 @@ library(sf)
 library(gapminder)
 library(rgdal)
 library(shinydashboard)
+library(shiny)
 library(scales)
 
 service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
@@ -34,9 +35,8 @@ PovertyLevel <- merge(shapeGroups,PovertyLevel,by.y = "id", by.x = "AFFGEOID",du
 Vacancies <- merge(shapeGroups,Vacancies,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 
 CrimeIcons <- iconList(
-  "ASLT/BATT NEG INJURY DRIVE-BY SHOOTING"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "ASSAULT/BATTERY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "ASSAULT/BATTERY NEGATIVE INJURY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "DRIVE-BY SHOOTING"= makeIcon(iconUrl = './icons/Drive By.png', iconWidth = 35, iconHeight = 35),#
+  "ASSAULT/BATTERY"= makeIcon(iconUrl = './icons/Assault.png', iconWidth = 35, iconHeight = 35),#
   "ASSAULT/BATTERY WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),
   "ASSAULT/BATTERY WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assault with Deadly Weapon.png', iconWidth = 35, iconHeight = 35),
   "AUTO BURGLARY"= makeIcon(iconUrl = './icons/Auto Burglary.png', iconWidth = 35, iconHeight = 35),
@@ -46,12 +46,20 @@ CrimeIcons <- iconList(
   "INDECENT EXPOSURE"= makeIcon(iconUrl = './icons/Indecent Exposure.png', iconWidth = 35, iconHeight = 35),
   "JUVENILE DISTURBANCE"= makeIcon(iconUrl = './icons/Juvenile Disturbance.png', iconWidth = 35, iconHeight = 35),
   "LARCENY FROM PERSON (NON ROBBERY)"= makeIcon(iconUrl = './icons/Larceny.png', iconWidth = 35, iconHeight = 35),
-  "MALICIOUS DESTRUCTION OF PROPERTY"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "OTHER DISTURBANCE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "PERSON WITH A GUN"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "PERSON WITH A KNIFE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "PERSON WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
-  "RECOVERED STOLEN VEHICLE"= makeIcon(iconUrl = './icons/Assualt with Gun.png', iconWidth = 35, iconHeight = 35),#
+  "MALICIOUS DESTRUCTION OF PROPERTY"= makeIcon(iconUrl = './icons/Property Damage.png', iconWidth = 35, iconHeight = 35),#
+  "OTHER DISTURBANCE"= makeIcon(iconUrl = './icons/Other Disturbance.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH A GUN"= makeIcon(iconUrl = './icons/Gun.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH A KNIFE"= makeIcon(iconUrl = './icons/Knife.png', iconWidth = 35, iconHeight = 35),#
+  "PERSON WITH OTHER DEADLY WEAPON"= makeIcon(iconUrl = './icons/Deadly Weapon.png', iconWidth = 35, iconHeight = 35),#
+  "RECOVERED STOLEN VEHICLE"= makeIcon(iconUrl = './icons/Recovered Vehicles.png', iconWidth = 35, iconHeight = 35),#
   "ROBBERY"= makeIcon(iconUrl = './icons/Robbery.png',iconWidth = 35,iconHeight = 35),
   "STOLEN MOTOR VEHICLE"= makeIcon(iconUrl = './icons/Stolen Motor Vehicle.png', iconWidth = 35, iconHeight = 35)
 )
+
+  businesses <- read.csv("./data/Business_Licenses_Data.csv")
+businesses$Original_Issue_Date <- as.Date(businesses$Original_Issue_Date, "%m/%d/%Y %H:%M")
+
+businesses <- businesses %>%
+  mutate(contentbox = paste('<b>',Category_Description,'</b>')) %>%
+  mutate(contentbox = paste(sep = '<br/>', contentbox,Business_Name,License_Type))
+
