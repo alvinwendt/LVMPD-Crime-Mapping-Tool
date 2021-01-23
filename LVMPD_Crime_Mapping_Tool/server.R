@@ -133,5 +133,16 @@ function(input, output) {
       m
   }
   )
-}
+  
+  output$table1 = DT::renderDataTable(service_calls %>% 
+                                        select(Event_Date,Type_Description,Suspect,DOB,Beat,),
+                                      rownames = F,
+                                      filter="top",
+                                      extensions="Buttons",
+                                     options=list(dom='Bfrtip',buttons=c('copy', 'csv', 'excel', 'pdf', 'print')
+                                     )
+                                                   )
+  
+  }
+
 

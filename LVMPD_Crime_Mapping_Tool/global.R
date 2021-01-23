@@ -9,6 +9,7 @@ library(rgdal)
 library(shinydashboard)
 library(shiny)
 library(scales)
+library(DT)
 
 service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
 service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
@@ -61,5 +62,5 @@ businesses$Original_Issue_Date <- as.Date(businesses$Original_Issue_Date, "%m/%d
 
 businesses <- businesses %>%
   mutate(contentbox = paste('<b>',Category_Description,'</b>')) %>%
-  mutate(contentbox = paste(sep = '<br/>', contentbox,Business_Name,License_Type))
+  mutate(contentbox = paste(sep = '<br/>', contentbox,Business_Name,Original_Issue_Date))
 

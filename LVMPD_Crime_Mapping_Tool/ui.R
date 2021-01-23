@@ -351,7 +351,7 @@ body <- dashboardBody(
                         dateRangeInput("datesbiz",
                                        label = ("Date Range"),
                                        width=380,
-                                       start = '2018-06-29', 
+                                       start = '1951-06-29', 
                                        end = '2020-12-05',
                                        min = "1951-06-29", 
                                        max = "2020-12-05"
@@ -387,7 +387,11 @@ body <- dashboardBody(
     )),
     column(width =8,
            box(width = NULL, solidHeader = TRUE,
-               leafletOutput("plot",height=580))
+               leafletOutput("plot",height=580)
+               ),
+           box(width = NULL, solidHeader = TRUE,
+               DT::dataTableOutput("table1")
+           )
     )
     
   )
