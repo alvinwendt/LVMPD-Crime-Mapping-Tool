@@ -2,14 +2,24 @@
 function(input, output) {
   output$plot <- renderLeaflet({
     # filter data from inputs
-    filteredData <- 
-      service_calls %>% filter(Type_Description %in% input$CrimeList) %>%  
-      filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2])
+    filteredData <-  
+      if (input$offender==""){
+        service_calls %>% 
+          filter(Type_Description %in% input$CrimeList) %>%  
+          filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2])
+      } else 
+      service_calls %>% 
+               filter(Type_Description %in% input$CrimeList) %>%  
+               filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2]) %>% 
+               filter(Offender == input$offender | is.null(Offender)) 
+               
     
     filteredBizData <- 
       businesses %>% filter(Category_Description %in% input$business_type) %>%  
-      filter(Original_Issue_Date >= input$datesbiz[1] & Original_Issue_Date <= input$datesbiz[2])
+      filter(Original_Issue_Date >= input$datesbiz[1] & Original_Issue_Date <= input$datesbiz[2]) 
     
+    
+    s = input$table1_rows_selected
 
     pal <- "YlOrRd"
     
@@ -33,24 +43,22 @@ function(input, output) {
         data = filteredBizData,
         popup = ~contentbox,
         clusterOptions = markerClusterOptions()
-      ) 
-    # %>% 
-    #   addDrawTool
-    #   addDrawToolbar(
-    #     targetGroup='Selected',
-    #     polylineOptions=FALSE,
-    #     markerOptions = FALSE,
-    #     polygonOptions = drawPolygonOptions(shapeOptions=drawShapeOptions(fillOpacity = 0
-    #                                                                       ,color = 'white'
-    #                                                                       ,weight = 3)),
-    #     rectangleOptions = drawRectangleOptions(shapeOptions=drawShapeOptions(fillOpacity = 0
-    #                                                                           ,color = 'white'
-    #                                                                           ,weight = 3)),
-    #     circleOptions = drawCircleOptions(shapeOptions = drawShapeOptions(fillOpacity = 0
-    #                                                                       ,color = 'white'
-    #                                                                       ,weight = 3)),
-    #     editOptions = editToolbarOptions(edit = FALSE, selectedPathOptions = selectedPathOptions()))
-    
+      ) %>%
+      addDrawToolbar(
+        targetGroup='Selected',
+        polylineOptions=FALSE,
+        markerOptions = FALSE,
+        polygonOptions = drawPolygonOptions(shapeOptions=drawShapeOptions(fillOpacity = 0
+                                                                          ,color = 'white'
+                                                                          ,weight = 3)),
+        rectangleOptions = drawRectangleOptions(shapeOptions=drawShapeOptions(fillOpacity = 0
+                                                                              ,color = 'white'
+                                                                              ,weight = 3)),
+        circleOptions = drawCircleOptions(shapeOptions = drawShapeOptions(fillOpacity = 0
+                                                                          ,color = 'white'
+                                                                          ,weight = 3)),
+        editOptions = editToolbarOptions(edit = FALSE, selectedPathOptions = selectedPathOptions()))
+
     
     
     if (input$mapfilter == "Employment Status") {
@@ -134,14 +142,27 @@ function(input, output) {
   }
   )
   
-  output$table1 = DT::renderDataTable(service_calls %>% 
-                                        select(Event_Date,Type_Description,Suspect,DOB,Beat,),
-                                      rownames = F,
-                                      filter="top",
-                                      extensions="Buttons",
-                                     options=list(dom='Bfrtip',buttons=c('copy', 'csv', 'excel', 'pdf', 'print')
-                                     )
-                                                   )
+
+  
+  output$table1 <-  DT::renderDataTable(
+    
+    if (input$offender==""){
+      service_calls %>% 
+        filter(Type_Description %in% input$CrimeList) %>%  
+        filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2]) %>% 
+        select(Event_Date,Type_Description,Offender,DOB,Beat)
+    } else 
+      service_calls %>% 
+      filter(Type_Description %in% input$CrimeList) %>%  
+      filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2]) %>% 
+      filter(Offender == input$offender | is.null(Offender)) %>% 
+      select(Event_Date,Type_Description,Offender,DOB,Beat),
+    
+    filter="top",
+    extensions="Buttons",
+    options=list(dom='Bfrtip',buttons=c('copy', 'csv', 'excel', 'pdf', 'print')
+    )
+  )
   
   }
 

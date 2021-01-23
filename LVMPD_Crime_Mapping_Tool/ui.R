@@ -301,6 +301,9 @@ body <- dashboardBody(
            tabPanel("Crime Filter", 
                     box(width = NULL, title =tagList(shiny::icon("filter",class = 'fa-lg'), "Filter Crime Data"),
                         solidHeader = T, collapsible = T, status = 'primary',
+                        
+                        textInput("offender", label = ("Offender Name"), placeholder = ""),
+                        
                         dateRangeInput("datescrime",
                                        label = ("Date Range"),
                                        width=380,
