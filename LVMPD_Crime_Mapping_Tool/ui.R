@@ -1,3 +1,5 @@
+#Pull in naming for crime selectors inputs
+
 typecrime <- c("DRIVE-BY SHOOTING" = "DRIVE-BY SHOOTING",
           "ASSAULT/BATTERY" = "ASSAULT/BATTERY",
           "ASSAULT/BATTERY WITH A GUN" = "ASSAULT/BATTERY WITH A GUN",
@@ -17,6 +19,8 @@ typecrime <- c("DRIVE-BY SHOOTING" = "DRIVE-BY SHOOTING",
           "RECOVERED STOLEN VEHICLE" = "RECOVERED STOLEN VEHICLE",
           "ROBBERY" = "ROBBERY",
           "STOLEN MOTOR VEHICLE" = "STOLEN MOTOR VEHICLE")
+
+#Pull in naming for business selectors inputs
 
 typebiz <- c('Administrative Office Space' = 'Administrative Office Space',
              'Adult Book Store' = 'Adult Book Store',
@@ -271,23 +275,36 @@ typebiz <- c('Administrative Office Space' = 'Administrative Office Space',
              'Wire Service' = 'Wire Service'
              )           
 
+#Title and Header for Shiny Dashboad
           
 header <- dashboardHeader(
   title = p("Las Vegas Metropolitan Police Department Crime Mapping Tool"), titleWidth = 600
 )
 
+#Disabled sidebar for aesthetics, use body instead for TabBoxes
+
 sidebar <- dashboardSidebar(disable = TRUE)
   
 
+#Shiny Dashboard Body
 
 body <- dashboardBody(
   
+#Custom Formatting
+    
  tags$head(
    tags$link(rel = "stylesheet", type = "text/css", href = "www/custom.css")),
-  fluidRow(
-    column(width =4,
+  
+ 
+ #Create Structure for Body of Shiny Dashboard
+ 
+ fluidRow(
+    column(width =4, # First Column
       box(width = NULL, title =tagList(shiny::icon("layer-group",class = 'fa-lg'), "Census Data Filters"),
         solidHeader = T, collapsible = T, status = 'primary',
+        
+        # Census Filter Input - Selector Widget
+        
         selectInput("mapfilter", label = ("Choose a Census Filter"),
                     width = 380,
                     choices = list("No Filter" = "No Filter", 
@@ -299,12 +316,19 @@ body <- dashboardBody(
                                    "Vacancies" = "Vacancies"),
                     selected = "No Filter"
         )),
-    tabsetPanel(
+    
+      #Create new box with 2 tabs
+      
+      tabsetPanel(
            tabPanel("Crime Filter", 
                     box(width = NULL, title =tagList(shiny::icon("filter",class = 'fa-lg'), "Filter Crime Data"),
                         solidHeader = T, collapsible = T, status = 'primary',
                         
+                        #Text Input for Offender Search
+                        
                         textInput("offender", label = ("Offender Name"), placeholder = ""),
+                        
+                        # Date Filter Input - Date Range Widget
                         
                         dateRangeInput("datescrime",
                                        label = ("Date Range"),
@@ -314,6 +338,8 @@ body <- dashboardBody(
                                        min = "2018-06-29", 
                                        max = "2020-12-05"
                         ),
+                        
+                        # Crime List Filter Input - Selectize Widget
                         
                         selectizeInput("CrimeList", 
                                        label = ("Crime List"),
@@ -330,18 +356,23 @@ body <- dashboardBody(
                                                   "ROBBERY"),
                                        multiple = T
                         ),
+                        
+                        #Load Map Button - Submit Widget
                         submitButton(text = "Load Map",icon =icon('filter')
                         )
                     ),
+                    
+                    #New Box for About Shiny App Section
+                    
                     box(width = NULL,title = tagList(shiny::icon("info-circle",class = 'fa-lg'), "About LVMPD Crime Mapping Tool"), solidHeader = T, collapsible = T, status = 'info',
                         strong("LVMPD Crime Mapping Tool"),"is an interactive map built on shiny which allows you to cutomize
                          time range and incident type to filter out crime reports of a certain location you want. The table
                below the map allows you to interact and view more details from the markers in the map. The data is from", a('here.', href = 'https://opendataportal-lasvegas.opendata.arcgis.com/', target = "_blank")
                     ),
+                    
+                    # New box for links to social and GitHub
+                    
                     box(width = NULL,
-                        # icon('link', class = 'fa-lg'), a('Personal Website', href = 'https://linkedin.com', target = '_blank'),
-                        # br(),
-                        # br(),
                         icon('github', class = 'fa-lg'), a('Source Code', href = 'https://github.com/alvinwendt/R-Shiny-Application', target = "_blank"),
                         br(),
                         br(),
@@ -350,9 +381,15 @@ body <- dashboardBody(
                         br(),
                         icon('linkedin-square', class = 'fa-lg'), a('My Linkedin Page', href = 'https://www.linkedin.com/in/alvinwendt/', target = "_blank"))
            ),
+           
+           #New TabBox for Business Filters
+           
            tabPanel("Business Filter", 
                     box(width = NULL, title =tagList(shiny::icon("filter",class = 'fa-lg'), "Filter Business Data"),
                         solidHeader = T, collapsible = T, status = 'primary',
+                        
+                        # Date Filter Input - Date Range Widget
+                        
                         dateRangeInput("datesbiz",
                                        label = ("Date Range"),
                                        width=380,
@@ -361,6 +398,8 @@ body <- dashboardBody(
                                        min = "1951-06-29", 
                                        max = "2020-12-05"
                         ),
+                        
+                        # Business List Filter Input - Selectize Widget
 
                         selectizeInput("business_type",
                                        label = ("Business Category"),
@@ -369,18 +408,25 @@ body <- dashboardBody(
                                        selected=NULL,
                                        multiple = T
                         ),
+                        
+                        #Load Map Button - Submit Widget
+                        
                         submitButton(text = "Load Map",icon =icon('filter')
                         )
                     ),
+                    
+                    # Box for About Shiny App Section
+                    
                     box(width = NULL,title = tagList(shiny::icon("info-circle",class = 'fa-lg'), "About LVMPD Crime Mapping Tool"), solidHeader = T, collapsible = T, status = 'info',
                         strong("LVMPD Crime Mapping Tool"),"is an interactive map built on shiny which allows you to cutomize
                          time range and incident type to filter out crime reports of a certain location you want. The table
                below the map allows you to interact and view more details from the markers in the map. The data is from", a('here.', href = 'https://opendataportal-lasvegas.opendata.arcgis.com/', target = "_blank")
                     ),
+                    
+                    # Box for links to social and GitHub
+                    
                     box(width = NULL,
-                        # icon('link', class = 'fa-lg'), a('Personal Website', href = 'https://linkedin.com', target = '_blank'),
-                        # br(),
-                        # br(),
+                     
                         icon('github', class = 'fa-lg'), a('Source Code', href = 'https://github.com/alvinwendt/R-Shiny-Application', target = "_blank"),
                         br(),
                         br(),
@@ -390,10 +436,16 @@ body <- dashboardBody(
                         icon('linkedin-square', class = 'fa-lg'), a('My Linkedin Page', href = 'https://www.linkedin.com/in/alvinwendt/', target = "_blank"))
             )
     )),
-    column(width =8,
+    
+    
+    column(width =8, # Second Column
+           
+           # Map Leaflet Output
            box(width = NULL, solidHeader = TRUE,
                leafletOutput("plot",height=580)
                ),
+           
+           # Data Table Output
            box(width = NULL, solidHeader = TRUE,
                DT::dataTableOutput("table1")
            )
@@ -404,8 +456,7 @@ body <- dashboardBody(
 
 
 
-  
-  
+  #Knit together Shiny Dashboard and Theme
 
 dashboardPage(
   skin="yellow",

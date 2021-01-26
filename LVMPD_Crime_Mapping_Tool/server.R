@@ -1,7 +1,9 @@
 
 function(input, output) {
+  
+  # Create Map
   output$plot <- renderLeaflet({
-    # filter data from inputs
+    # filter data from Crime inputs - if statement filters whether there is an input in the Offender Search Box or not
     filteredData <-  
       if (input$offender==""){
         service_calls %>% 
@@ -12,14 +14,14 @@ function(input, output) {
                filter(Type_Description %in% input$CrimeList) %>%  
                filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2]) %>% 
                filter(Offender == input$offender | is.null(Offender)) 
-               
+              
+    # Filter Business Data from business inputs 
     
     filteredBizData <- 
       businesses %>% filter(Category_Description %in% input$business_type) %>%  
       filter(Original_Issue_Date >= input$datesbiz[1] & Original_Issue_Date <= input$datesbiz[2]) 
     
-    
-    s = input$table1_rows_selected
+    # Modify Palette Globally for Chloropleth
 
     pal <- "YlOrRd"
     
@@ -33,17 +35,20 @@ function(input, output) {
         baseGroups = c('Open Street Map', 'Satellite', 'Clear Street View'),
         options = layersControlOptions(collapsed = FALSE)
       ) %>% 
+      #To Add Crime Markers
       addMarkers(
         data = filteredData,
         icon = ~CrimeIcons[Type_Description],
         popup = ~contentbox,
         clusterOptions = markerClusterOptions()
       ) %>% 
+      #To Add Business Markers
       addMarkers(
         data = filteredBizData,
         popup = ~contentbox,
         clusterOptions = markerClusterOptions()
       ) %>%
+      # To add Drawing features to map (Note: Was not able to utilize this feature to interact with statistical and date outputs)
       addDrawToolbar(
         targetGroup='Selected',
         polylineOptions=FALSE,
@@ -60,6 +65,7 @@ function(input, output) {
         editOptions = editToolbarOptions(edit = FALSE, selectedPathOptions = selectedPathOptions()))
 
     
+    #If-else statement to re-render map based on Census Filter Selection. 
     
     if (input$mapfilter == "Employment Status") {
       ES_pal <- colorBin(palette = pal,
@@ -142,9 +148,11 @@ function(input, output) {
   }
   )
   
-
+# Create Data Table Output
   
   output$table1 <-  DT::renderDataTable(
+    
+    #if Else Statement to filter table based on offender text input
     
     if (input$offender==""){
       service_calls %>% 
@@ -157,6 +165,8 @@ function(input, output) {
       filter(Event_Date >= input$datescrime[1] & Event_Date <= input$datescrime[2]) %>% 
       filter(Offender == input$offender | is.null(Offender)) %>% 
       select(Event_Date,Type_Description,Offender,DOB,Beat),
+    
+    # Table Export Features
     
     filter="top",
     extensions="Buttons",

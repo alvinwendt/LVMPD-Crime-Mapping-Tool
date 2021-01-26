@@ -12,15 +12,21 @@ library(scales)
 library(DT)
 library(shinythemes)
 
+#Read in Service Call data
 service_calls <- read.csv("./data/Metro_CFS_OpenData_CLEAN.csv")
+
+#Turn Convert Date Strings to Dates
 service_calls$Event_Date <- as.Date(service_calls$Event_Date, "%m/%d/%Y %H:%M")
 
+# Create Pop-Up Values in new column to be used in map
 service_calls <- service_calls %>%
   mutate(contentbox = paste('<b>',Type_Description,'</b>')) %>%
   mutate(contentbox = paste(sep = '<br/>', contentbox,Offender,Event_Date))
 
+#Read in Census Tract Shape File
 shapeGroups <- readOGR("data/Census Shp File Groups/cb_2018_32_bg_500k.shp")
 
+#Read in Census Data
 EmploymentStatus <- read.csv("data/Census Employment Status/ACSDT5Y2019.B23025_data_with_overlays_2021-01-12T212705.csv")
 MedianAge <- read.csv("data/Census Median Age by Sex/ACSDT5Y2019.B01002_data_with_overlays_2021-01-12T210241.csv")
 MedianIncome <- read.csv("data/Census Median Household Income/ACSDT5Y2019.B19013_data_with_overlays_2021-01-09T133607.csv")
@@ -28,7 +34,7 @@ MedianHousePrice <- read.csv("data/Census Median Housing Price/ACSDT5Y2019.B2507
 PovertyLevel <- read.csv("data/Census Poverty Level/ACSDT5Y2019.B29003_data_with_overlays_2021-01-12T212252.csv")
 Vacancies <- read.csv("data/Census Vacancies/ACSDT5Y2019.B25004_data_with_overlays_2021-01-12T213202.csv")
 
-
+# Merge Census Data to Shape File
 EmploymentStatus <- merge(shapeGroups,EmploymentStatus,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 MedianAge <- merge(shapeGroups,MedianAge,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 MedianIncome <- merge(shapeGroups,MedianIncome,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
@@ -36,6 +42,7 @@ MedianHousePrice <- merge(shapeGroups,MedianHousePrice,by.y = "id", by.x = "AFFG
 PovertyLevel <- merge(shapeGroups,PovertyLevel,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 Vacancies <- merge(shapeGroups,Vacancies,by.y = "id", by.x = "AFFGEOID",duplicateGeoms = T)
 
+#Read in Crime Icons to replace Generic Markers in Map
 CrimeIcons <- iconList(
   "DRIVE-BY SHOOTING"= makeIcon(iconUrl = './icons/Drive By.png', iconWidth = 35, iconHeight = 35),#
   "ASSAULT/BATTERY"= makeIcon(iconUrl = './icons/Assault.png', iconWidth = 35, iconHeight = 35),#
@@ -58,9 +65,13 @@ CrimeIcons <- iconList(
   "STOLEN MOTOR VEHICLE"= makeIcon(iconUrl = './icons/Stolen Motor Vehicle.png', iconWidth = 35, iconHeight = 35)
 )
 
-  businesses <- read.csv("./data/Business_Licenses_Data.csv")
+#Read in Business Data
+businesses <- read.csv("./data/Business_Licenses_Data.csv")
+  
+#Turn Convert Date Strings to Dates
 businesses$Original_Issue_Date <- as.Date(businesses$Original_Issue_Date, "%m/%d/%Y %H:%M")
 
+# Create Pop-Up Values in new column to be used in map
 businesses <- businesses %>%
   mutate(contentbox = paste('<b>',Category_Description,'</b>')) %>%
   mutate(contentbox = paste(sep = '<br/>', contentbox,Business_Name,Original_Issue_Date))
