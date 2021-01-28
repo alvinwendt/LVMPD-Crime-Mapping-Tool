@@ -1,4 +1,5 @@
-# R-Shiny-Application
+# Las Vegas Metropolitan Police Department Crime Mapping Tool 
+### R-Shiny-Application
 
 
 <!-- TABLE OF CONTENTS -->
