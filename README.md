@@ -51,10 +51,6 @@ The following tools were utilized to build this application:
 
 ## Roadmap
 
-## Contributing
-
-## License
-
 ## Contact
 
 Alvin Wendt - [Linkedin](https://www.linkedin.com/in/alvinwendt/)
