@@ -19,10 +19,8 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#How to Use">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
@@ -50,12 +48,14 @@ The following tools were utilized to build this application:
 
 Data was obtained from the following resources:
 
-Las Vegas Open Data - [Linkedin](https://www.linkedin.com/in/alvinwendt/)
-US Census - [Linkedin](https://www.linkedin.com/in/alvinwendt/)
+City of Las Vegas Open Data - [Metro CFS OpenData](https://opendataportal-lasvegas.opendata.arcgis.com/datasets/metro-cfs-opendata/data?orderBy=Event_Date)
+US Census - [Census.gov](https://www.census.gov/data.html)
 
 ## How to Use
 
 ## Roadmap
+
+
 
 ## Contact
 
