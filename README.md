@@ -49,6 +49,7 @@ The following tools were utilized to build this application:
 Data was obtained from the following resources:
 
 City of Las Vegas Open Data - [Metro CFS OpenData](https://opendataportal-lasvegas.opendata.arcgis.com/datasets/metro-cfs-opendata/data?orderBy=Event_Date)
+
 US Census - [Census.gov](https://www.census.gov/data.html)
 
 ## How to Use
