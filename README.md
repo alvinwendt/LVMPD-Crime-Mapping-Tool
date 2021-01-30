@@ -1,4 +1,4 @@
-# Las Vegas Metropolitan Police Department Crime Mapping Tool 
+# Las Vegas Metropolitan Police Department (LVMPD) Crime Mapping Tool 
 ### R-Shiny-Application
 
 
@@ -32,8 +32,12 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
+This project was initiated by a sparked interest from a detective from Las Vegas Metropolitan Police Department to prototype an application utilizing priciples and strategies from the Place Based Investigations of Violent Offender Territories Project (Project PIVOT).
 
+Project PIVOT is a strategy developed to address small areas where violence has been chronic and sustained.  This strategy focuses on identifying place networks that facilitate violence.  The goal is to disrupt offenders’ ability to harm individuals and the surrounding community, using a problem-oriented approach that capitalizes both on focused deterrence and place network interventions.  Sustainable solutions are considered paramount.
 
+The result was a prototype for crime mapping tool which uses police calls for service from Las Vegas Open Data overlayed on US census data. 
+The goal of this project was to provided a multi-layered view of crimes and the underlying environments to infer correlations.
 
 ### Built With
 
@@ -42,13 +46,14 @@ The following tools were utilized to build this application:
 * [Shiny](https://shiny.rstudio.com/)
 * [Leaflet](https://rstudio.github.io/leaflet/)
 
-## Getting Started
+## Data
 
-### Data
+Data was obtained from the following resources:
 
-### Installation
+Las Vegas Open Data - [Linkedin](https://www.linkedin.com/in/alvinwendt/)
+US Census - [Linkedin](https://www.linkedin.com/in/alvinwendt/)
 
-## Usage
+## How to Use
 
 ## Roadmap
 
