@@ -4,7 +4,7 @@
 
 <h2 align="center"> Link to Presentation can be found here:<a href="https://1drv.ms/p/s!Ai47h8zVN0kbh6U6u-AFkMyx0E6pqw?e=jh6Ecc">  <img src="https://user-images.githubusercontent.com/70002987/121709186-e70d0b00-ca9d-11eb-9ccb-45b89bdc4a4d.jpg" width="100" />
 </a>
-
+</div>
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
