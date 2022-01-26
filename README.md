@@ -10,7 +10,7 @@
 
 ## 📝 Table of Contents
 <details open="open">
-  <summary>Table of Contents</summary>
+  <summary></summary>
   <ol>
     <li>
       <a href="#about-the-project">About The Project</a>
