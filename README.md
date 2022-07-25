@@ -58,9 +58,9 @@ City of Las Vegas Open Data - [Metro CFS OpenData](https://opendataportal-lasveg
 
 US Census - [Census.gov](https://www.census.gov/data.html)
 
-## How to Use
+## Project Tool
 
-
+[Link to LVMPD Crime Mapping Tool](https://alvinwendt.shinyapps.io/LVMPD_Crime_Mapping_Tool/)
 
 ## Contact
 
