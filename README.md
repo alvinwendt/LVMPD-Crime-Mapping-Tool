@@ -60,7 +60,7 @@ US Census - [Census.gov](https://www.census.gov/data.html)
 
 ## Project Tool
 
-[Link to LVMPD Crime Mapping Tool](https://alvinwendt.shinyapps.io/LVMPD_Crime_Mapping_Tool/)
+## [Link to LVMPD Crime Mapping Tool](https://alvinwendt.shinyapps.io/LVMPD_Crime_Mapping_Tool/)
 
 ## Contact
 
